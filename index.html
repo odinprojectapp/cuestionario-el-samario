@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cuestionario El Samario</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== CONFIGURACIÓN DE MARCA =====
+   Soluciones Digitales: azul #0F9ED5 → morado #A855F7 (tomado de propuesta.html)
+   Domicilios El Samario: cambia --samario si su logo usa otro color */
+:root{
+  --sd-blue:#0F9ED5; --sd-purple:#A855F7; --samario:#F2B705;
+  --bg:#F4F7FB; --surface:#FFFFFF; --text:#0B1626; --muted:#5B6B80; --line:#DCE4EE;
+  --focus:#0F9ED5; --ok:#16A34A; --err:#DC2626;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#050C18; --surface:#0B1628; --text:#F1F5F9; --muted:#94A3B8; --line:#1E2D45; color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font);background:var(--bg);color:var(--text);
+  padding:env(safe-area-inset-top,0) max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto}
+/* encabezado */
+.brandbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0 14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{height:40px;width:auto;max-width:160px;object-fit:contain}
+.sd-word{font-weight:900;font-size:18px;letter-spacing:-.5px;background:linear-gradient(120deg,var(--sd-blue),var(--sd-purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sam-word{font-weight:800;font-size:17px;line-height:1.1}
+.sam-word small{display:block;font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sam-word b{box-shadow:inset 0 -.38em 0 color-mix(in srgb,var(--samario) 70%,transparent)}
+.x{color:var(--muted);font-size:14px}
+.hero{background:linear-gradient(135deg,var(--sd-blue),var(--sd-purple));color:#fff;border-radius:16px;padding:24px 22px;margin-bottom:18px}
+.hero h1{margin:0 0 8px;font-size:clamp(24px,6vw,32px);line-height:1.1;letter-spacing:-.5px;text-wrap:balance}
+.hero p{margin:0;opacity:.92;max-width:58ch}
+.hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hero .chips span{background:rgba(255,255,255,.18);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+/* progreso */
+.progress{position:sticky;top:env(safe-area-inset-top,0);z-index:5;background:var(--bg);padding:10px 0 12px}
+.steps{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.steps::-webkit-scrollbar{display:none}
+.steps button{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 12px;font:600 13px var(--font);cursor:pointer}
+.steps button[aria-current="step"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.steps button.done{border-color:var(--ok);color:var(--ok)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sd-blue),var(--sd-purple));transition:width .3s}
+.pct{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between}
+/* preguntas */
+.section h2{font-size:22px;margin:8px 0 4px;letter-spacing:-.3px}
+.section .lead{color:var(--muted);margin:0 0 14px;font-size:15px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.card .qn{font-size:12px;font-weight:700;color:var(--sd-blue);letter-spacing:.06em}
+.card .key{font-size:11px;font-weight:700;color:var(--sd-purple);border:1px solid currentColor;border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.card label.q,.card legend.q{display:block;font-weight:700;font-size:16.5px;margin:0 0 10px;line-height:1.35;padding:0}
+.card legend.q{float:left;width:100%}
+fieldset.card>:not(legend){clear:both}
+.card .meta{display:block;margin-bottom:4px}
+.card .hint{font-size:13.5px;color:var(--muted);margin:-6px 0 10px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.opts{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr))}
+.opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;min-height:46px}
+.opt input{width:18px;height:18px;accent-color:var(--sd-blue);flex:none;margin:0}
+.opt:has(input:checked){border-color:var(--sd-blue);background:color-mix(in srgb,var(--sd-blue) 9%,transparent)}
+.sub{font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--text)}
+input[type=text],input[type=number],input[type=date],input[type=tel],textarea,select{width:100%;font:16px var(--font);color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+textarea{min-height:96px;resize:vertical}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+.row label{font-size:13.5px;color:var(--muted);display:block;margin-bottom:4px}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--focus) 55%,transparent);outline-offset:2px}
+/* barra inferior */
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:6;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.nav .in{max-width:720px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nav .saved{font-size:12px;color:var(--muted);flex:1;min-width:0}
+.btn{font:700 15px var(--font);border-radius:10px;padding:12px 18px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}
+.btn.primary{background:linear-gradient(120deg,var(--sd-blue),var(--sd-purple));color:#fff;border:0}
+.btn:disabled{opacity:.5;cursor:default}
+/* final */
+.final .card p{margin:0 0 10px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.msg{border-radius:10px;padding:12px 14px;margin-top:12px;font-weight:600}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.msg.err{background:color-mix(in srgb,var(--err) 12%,transparent);color:var(--err)}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 0}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar">
+    <div class="brand">
+      <img src="logo-soluciones-digitales.png" alt="Soluciones Digitales" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sd-word',textContent:'Soluciones Digitales'}))">
+    </div>
+    <span class="x">para</span>
+    <div class="brand">
+      <img src="logo-el-samario.png" alt="Domicilios El Samario" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sam-word',innerHTML:'<small>Domicilios</small><b>El Samario</b>'}))">
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Conozcamos su negocio</h1>
+    <p>Con estas respuestas diseñamos la app de Domicilios El Samario a la medida de cómo trabaja hoy. Puede responder por partes: lo que escriba se guarda en este celular o computador hasta que lo envíe.</p>
+    <div class="chips"><span>32 preguntas</span><span>6 secciones</span><span>15-20 minutos</span></div>
+  </div>
+
+  <div class="progress">
+    <div class="steps" id="steps" role="tablist" aria-label="Secciones"></div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="pct"><span id="pctText">0 de 32 respondidas</span><span id="secText"></span></div>
+  </div>
+
+  <form id="form" novalidate></form>
+
+  <footer>Preparado por Soluciones Digitales · Sus respuestas son confidenciales y solo se usan para este proyecto.</footer>
+</div>
+
+<div class="nav"><div class="in">
+  <span class="saved" id="saved">Sus respuestas se guardan solas</span>
+  <button type="button" class="btn" id="prev">Atrás</button>
+  <button type="button" class="btn primary" id="next">Siguiente</button>
+</div></div>
+
+<script>
+/* ===== CONFIGURACIÓN DE ENVÍO =====
+   El link del servidor se lee de endpoint.json (lo actualiza servidor/iniciar.py en cada arranque).
+   Sin link = el botón Enviar ofrece WhatsApp y descarga de archivo. */
+let ENDPOINT = "";
+fetch("endpoint.json?t=" + Date.now()).then(r => r.ok ? r.json() : {}).then(j => { ENDPOINT = j.url || ""; }).catch(() => {});
+const WHATSAPP_DESTINO = ""; // tu número con indicativo, ej. "573001234567"
+
+const SECTIONS = [
+ {id:"operacion",title:"Operación",lead:"Cómo funciona un día normal de trabajo.",qs:[
+  {id:"q1",key:1,t:"¿Cuántos pedidos recibe al día?",type:"numbers",fields:["Día normal","Día pico","Día flojo"]},
+  {id:"q2",t:"¿Cuál es su horario de atención?",type:"text",ph:"Ej: lunes a sábado 7 am a 10 pm",extra:{type:"multi",label:"También atiende:",opts:["Domingos","Festivos","Horario nocturno"]}},
+  {id:"q3",t:"¿Qué servicios le piden más?",hint:"Marque todos los que apliquen.",type:"multi",opts:["Domicilios de comida","Mensajería / documentos","Compras y mandados","Paquetería","Regalos en fechas especiales","Pagos y trámites"],other:1,extra:{type:"text",label:"¿Cuál le deja mejor ganancia?"}},
+  {id:"q4",t:"Cuénteme un pedido paso a paso, desde el primer mensaje hasta que se cobra.",type:"area",ph:"Ej: el cliente me escribe al WhatsApp, le cotizo, le escribo al domiciliario por el grupo..."},
+  {id:"q5",t:"¿Qué zonas cubre?",type:"multi",opts:["Centro / Bahía","El Rodadero / Gaira","Taganga","Mamatoco","Bastidas","Bello Horizonte / Pozos Colorados","El Prado","Norte / Troncal","Minca","Fuera de la ciudad (Ciénaga, etc.)"],other:1,extra:{type:"area",label:"¿Cuáles rechaza o cobra distinto, y por qué?"}},
+  {id:"q6",t:"¿Qué hace cuando hay más pedidos que domiciliarios? ¿Y cuando llueve?",type:"area"},
+  {id:"q7",t:"¿Qué problemas se repiten?",type:"multi",opts:["Pedidos olvidados","Direcciones mal dadas","Demoras","Pérdidas o daños","Clientes que no pagan","No hay domiciliario disponible","Quejas por el precio"],other:1}
+ ]},
+ {id:"domiciliarios",title:"Domiciliarios",lead:"Su equipo en la calle.",qs:[
+  {id:"q8",t:"¿Cuántos domiciliarios trabajan con usted?",type:"numbers",fields:["En total","Activos a la vez (hora pico)"]},
+  {id:"q9",key:1,t:"¿Qué tipo de vínculo tienen?",type:"single",opts:["Empleados con contrato","Independientes","Por turnos","Mixto"],other:1},
+  {id:"q10",t:"¿De quién son las motos?",type:"single",opts:["Del domiciliario","Del negocio","Mixto"],extra:{type:"text",label:"¿Quién paga gasolina, mantenimiento y seguros?"}},
+  {id:"q11",t:"¿Cómo les paga?",type:"single",opts:["Valor fijo por servicio","Porcentaje del domicilio","Sueldo fijo","Fijo + variable"],other:1,extra:{type:"single",label:"¿Cada cuánto?",opts:["Diario","Semanal","Quincenal","Mensual"]}},
+  {id:"q12",t:"¿Cómo asigna hoy los pedidos?",type:"single",opts:["Yo le escribo a cada uno","Grupo de WhatsApp: el primero que responda","Por turnos u orden","El más cercano"],other:1},
+  {id:"q13",key:1,t:"¿Los domiciliarios reciben efectivo de los clientes?",type:"single",opts:["Sí, casi siempre","A veces","No, casi todo es transferencia"],extra:{type:"area",label:"¿Cómo cuadran ese dinero con usted?"}},
+  {id:"q14",t:"¿Qué celular y datos tienen los domiciliarios?",type:"single",opts:["Todos Android con datos","Mezcla de Android y iPhone","Algunos sin datos o sin smartphone"],extra:{type:"single",label:"¿Aceptarían usar una app para recibir pedidos?",opts:["Sí, sin problema","Sí, con capacitación","Habría resistencia"]}},
+  {id:"q15",t:"¿Cómo selecciona y verifica a un domiciliario nuevo?",type:"multi",opts:["Recomendación","Revisión de antecedentes","Copia de cédula, licencia y SOAT","Periodo de prueba","No hay un proceso formal"],other:1}
+ ]},
+ {id:"clientes",title:"Clientes",lead:"Quién le compra y cómo lo encuentran.",qs:[
+  {id:"q16",t:"¿Quiénes son sus clientes típicos?",type:"multi",opts:["Hogares","Restaurantes y comercios","Turistas y hoteles","Empresas y oficinas","Vendedores de Instagram"],other:1},
+  {id:"q17",t:"¿Cómo le llegan los clientes nuevos?",type:"multi",opts:["Instagram","Facebook","Recomendación","Estados de WhatsApp","Google","Volantes","Convenios con negocios"],other:1},
+  {id:"q18",t:"¿Tiene una lista de sus clientes frecuentes?",type:"single",opts:["Sí, en Excel o cuaderno","Solo en los contactos de WhatsApp","No"]},
+  {id:"q19",t:"¿Cuáles son las quejas más comunes de los clientes?",type:"area"},
+  {id:"q20",key:1,t:"¿Sus clientes querrían ver en el mapa dónde va su pedido?",type:"single",opts:["Sí, lo preguntan mucho","Les daría igual","Prefieren seguir por WhatsApp","No sé"]},
+  {id:"q21",t:"¿Qué promociones le han funcionado y cuáles no?",type:"area"}
+ ]},
+ {id:"dinero",title:"Dinero",lead:"Precios, pagos y cuentas.",qs:[
+  {id:"q22",t:"¿Cómo calcula el precio de cada servicio?",type:"single",opts:["Tarifa fija por barrio o zona","Por distancia","Tengo una tabla de precios","A criterio según el caso"],extra:{type:"area",label:"¿Cuánto cobra normalmente? (ej: Centro a Rodadero $8.000)"}},
+  {id:"q23",t:"¿Qué medios de pago acepta?",type:"multi",opts:["Efectivo","Nequi","Daviplata","Transferencia bancaria","Llave / QR Bre-B","Datáfono / tarjeta","Link de pago"],other:1},
+  {id:"q24",t:"¿Cómo hace el cierre de caja del día?",type:"area",extra:{type:"single",label:"¿Cuánto tiempo le toma?",opts:["Menos de 15 min","15 a 30 min","30 min a 1 hora","Más de 1 hora"]}},
+  {id:"q25",t:"¿Cuáles son sus costos mensuales aproximados?",hint:"Arriendo, publicidad, celular, uniformes, pagos a domiciliarios... Lo que quiera compartir.",type:"area"},
+  {id:"q26",t:"¿Cómo está constituido el negocio?",type:"single",opts:["Persona natural","Empresa (SAS u otra)","Aún informal"],extra:{type:"single",label:"¿Emite factura electrónica?",opts:["Sí","No","En proceso"]}}
+ ]},
+ {id:"tecnologia",title:"Tecnología",lead:"Las herramientas que usa hoy.",qs:[
+  {id:"q27",t:"¿Qué herramientas usa hoy para el negocio?",type:"multi",opts:["WhatsApp Business","WhatsApp normal","Excel o Google Sheets","Cuaderno","Google Maps","Otra app"],other:1},
+  {id:"q28",t:"¿Quiere seguir recibiendo pedidos por WhatsApp cuando exista la app?",type:"single",opts:["Sí, como canal principal","Sí, junto con la app","No, que todo pase por la app"]},
+  {id:"q29",t:"¿Quién manejaría el panel de control?",type:"single",opts:["Yo","Un despachador","Un familiar","Varias personas"],other:1}
+ ]},
+ {id:"metas",title:"Metas",lead:"Hacia dónde quiere llevar el negocio.",qs:[
+  {id:"q30",t:"¿Cuántos pedidos al día y qué ingresos quiere tener en 12 meses?",type:"area"},
+  {id:"q31",t:"¿Hasta dónde quiere crecer?",type:"multi",opts:["Consolidarme en Santa Marta","Abrir en otras ciudades","Convenios con comercios y hoteles","Vender el sistema a otros negocios"],other:1},
+  {id:"q32",key:1,t:"¿Qué presupuesto tiene y para cuándo quiere la primera versión?",type:"single",opts:["Menos de $5 millones","$5 a $10 millones","$10 a $20 millones","Más de $20 millones","Prefiero conversarlo"],extra:{type:"date",label:"Fecha ideal"}}
+ ]},
+ {id:"contacto",title:"Enviar",lead:"Revise y envíe sus respuestas.",qs:[]}
+];
+
+const STORE = "samario-cuestionario-v1";
+const form = document.getElementById("form");
+let data = {}, step = 0;
+try { data = JSON.parse(localStorage.getItem(STORE) || "{}"); } catch(e) { data = {}; }
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function field(name, def, label){
+  const v = data[name];
+  const lab = label ? `<div class="sub">${esc(label)}</div>` : "";
+  switch(def.type){
+    case "text": return `${lab}<input type="text" name="${name}" id="${name}" placeholder="${esc(def.ph||"")}" value="${esc(v||"")}">`;
+    case "area": return `${lab}<textarea name="${name}" id="${name}" placeholder="${esc(def.ph||"")}">${esc(v||"")}</textarea>`;
+    case "date": return `${lab}<input type="date" name="${name}" id="${name}" value="${esc(v||"")}">`;
+    case "numbers": return `${lab}<div class="row">${def.fields.map((f,i)=>{const n=`${name}_${i}`;return `<div><label for="${n}">${esc(f)}</label><input type="number" inputmode="numeric" min="0" name="${n}" id="${n}" value="${esc(data[n]||"")}"></div>`}).join("")}</div>`;
+    case "single": case "multi": {
+      const t = def.type==="single" ? "radio" : "checkbox";
+      const sel = Array.isArray(v) ? v : (v ? [v] : []);
+      let h = `${lab}<div class="opts">` + def.opts.map((o,i)=>`<label class="opt"><input type="${t}" name="${name}" id="${name}_${i}" value="${esc(o)}"${sel.includes(o)?" checked":""}><span>${esc(o)}</span></label>`).join("") + `</div>`;
+      if (def.other) h += `<div class="sub">Otro:</div><input type="text" name="${name}_otro" id="${name}_otro" value="${esc(data[name+"_otro"]||"")}">`;
+      return h;
+    }
+  }
+}
+
+function render(){
+  const s = SECTIONS[step];
+  if (s.id === "contacto") { renderFinal(); return; }
+  const before = SECTIONS.slice(0, step).reduce((a,x)=>a+x.qs.length, 0);
+  form.innerHTML = `<div class="section"><h2>${esc(s.title)}</h2><p class="lead">${esc(s.lead)}</p>` +
+    s.qs.map((q,i)=>{
+      const isGroup = q.type==="single"||q.type==="multi"||q.type==="numbers";
+      const tag = isGroup ? "legend" : "label";
+      const forAttr = isGroup ? "" : ` for="${q.id}"`;
+      const inner = `<${tag} class="q"${forAttr}><span class="meta"><span class="qn">PREGUNTA ${before+i+1}</span>${q.key?'<span class="key">CLAVE</span>':""}</span>${esc(q.t)}</${tag}>${q.hint?`<p class="hint">${esc(q.hint)}</p>`:""}${field(q.id,q)}${q.extra?field(q.id+"_b",q.extra,q.extra.label):""}`;
+      return isGroup ? `<fieldset class="card">${inner}</fieldset>` : `<div class="card">${inner}</div>`;
+    }).join("") + `</div>`;
+  chrome();
+}
+
+function renderFinal(){
+  form.innerHTML = `<div class="section final"><h2>Enviar respuestas</h2><p class="lead">Lleva <b>${answered()} de 32</b> preguntas respondidas. Puede volver a cualquier sección antes de enviar.</p>
+   <div class="card"><div class="row">
+     <div><label for="c_nombre">Su nombre</label><input type="text" id="c_nombre" name="c_nombre" value="${esc(data.c_nombre||"")}"></div>
+     <div><label for="c_tel">Teléfono / WhatsApp</label><input type="tel" id="c_tel" name="c_tel" value="${esc(data.c_tel||"")}"></div>
+   </div>
+   <div class="sub">¿Algo más que quiera contarnos?</div><textarea id="c_notas" name="c_notas">${esc(data.c_notas||"")}</textarea>
+   <div class="actions">
+     <button type="button" class="btn primary" id="send">Enviar respuestas</button>
+     <button type="button" class="btn" id="wa"${WHATSAPP_DESTINO?"":" hidden"}>Enviar por WhatsApp</button>
+     <button type="button" class="btn" id="dl">Descargar copia</button>
+   </div>
+   <div id="out"></div></div></div>`;
+  document.getElementById("send").onclick = send;
+  document.getElementById("wa").onclick = sendWhatsApp;
+  document.getElementById("dl").onclick = download;
+  chrome();
+}
+
+function chrome(){
+  const st = document.getElementById("steps");
+  st.innerHTML = SECTIONS.map((s,i)=>`<button type="button" data-i="${i}"${i===step?' aria-current="step"':""} class="${i<SECTIONS.length-1&&sectionDone(s)?"done":""}">${esc(s.title)}</button>`).join("");
+  st.querySelectorAll("button").forEach(b=>b.onclick=()=>go(+b.dataset.i));
+  st.querySelector('[aria-current]')?.scrollIntoView({inline:"center",block:"nearest"});
+  const a = answered();
+  document.getElementById("bar").style.width = (a/32*100)+"%";
+  document.getElementById("pctText").textContent = `${a} de 32 respondidas`;
+  document.getElementById("secText").textContent = `Sección ${step+1} de ${SECTIONS.length}`;
+  document.getElementById("prev").disabled = step===0;
+  const nx = document.getElementById("next");
+  nx.hidden = step===SECTIONS.length-1;
+  nx.textContent = step===SECTIONS.length-2 ? "Revisar y enviar" : "Siguiente";
+}
+
+const has = id => Object.keys(data).some(k => (k===id || k.startsWith(id+"_")) && (Array.isArray(data[k]) ? data[k].length : String(data[k]).trim()));
+const answered = () => SECTIONS.flatMap(s=>s.qs).filter(q=>has(q.id)).length;
+const sectionDone = s => s.qs.length && s.qs.every(q=>has(q.id));
+
+function collect(){
+  const fd = new FormData(form);
+  const names = new Set([...form.elements].map(e=>e.name).filter(Boolean));
+  names.forEach(n=>{
+    const el = form.elements[n];
+    const isCheck = el && (el.type==="checkbox" || (el[0] && el[0].type==="checkbox"));
+    data[n] = isCheck ? fd.getAll(n) : (fd.get(n) ?? "");
+  });
+  try { localStorage.setItem(STORE, JSON.stringify(data)); document.getElementById("saved").textContent = "Guardado " + new Date().toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"}); } catch(e) {}
+  chrome();
+}
+form.addEventListener("input", collect);
+form.addEventListener("change", collect);
+
+function go(i){ collect(); step = Math.max(0, Math.min(SECTIONS.length-1, i)); render(); window.scrollTo({top:0}); }
+document.getElementById("prev").onclick = () => go(step-1);
+document.getElementById("next").onclick = () => go(step+1);
+
+/* Una fila por envío: las claves son los encabezados de columna del Excel, en orden fijo */
+const val = k => { const v = data[k]; return Array.isArray(v) ? v.join("; ") : (v ?? ""); };
+function answers(){
+  const out = [];
+  for (const q of SECTIONS.flatMap(s=>s.qs)) {
+    const n = q.id.slice(1);
+    const a = q.type==="numbers"
+      ? q.fields.map((f,i)=>val(q.id+"_"+i) && `${f}: ${val(q.id+"_"+i)}`).filter(Boolean).join(" | ")
+      : [val(q.id), val(q.id+"_otro") && "Otro: "+val(q.id+"_otro")].filter(Boolean).join("; ");
+    out.push([`${n}. ${q.t}`, a]);
+    if (q.extra) out.push([`${n}b. ${q.extra.label}`, val(q.id+"_b")]);
+  }
+  return out;
+}
+function toRow(){
+  return Object.fromEntries([["Nombre", val("c_nombre")], ["Teléfono", val("c_tel")], ...answers(), ["Notas", val("c_notas")]]);
+}
+function toText(){
+  const lines = [`Cuestionario El Samario - ${val("c_nombre")} ${val("c_tel")}`];
+  for (const [h, a] of answers()) lines.push(`${/^\d+\./.test(h) ? "\n" : ""}${h}\n${a || "-"}`);
+  if (val("c_notas")) lines.push(`\nNotas: ${val("c_notas")}`);
+  return lines.join("\n");
+}
+function show(ok, text){ document.getElementById("out").innerHTML = `<div class="msg ${ok?"ok":"err"}">${esc(text)}</div>`; }
+
+async function send(){
+  collect();
+  if (!ENDPOINT) { show(false, WHATSAPP_DESTINO ? "El envío en línea no está disponible ahora. Use Enviar por WhatsApp o descargue una copia." : "El envío en línea no está disponible ahora. Intente más tarde o descargue una copia; sus respuestas siguen guardadas."); return; }
+  const b = document.getElementById("send"); b.disabled = true; b.textContent = "Enviando...";
+  try {
+    const r = await fetch(ENDPOINT, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(toRow()) });
+    if (!r.ok) throw new Error(r.status);
+    try { localStorage.setItem(STORE + "-enviado", new Date().toISOString()); } catch(e) {}
+    show(true, "¡Listo! Recibimos sus respuestas. Gracias.");
+    b.textContent = "Enviado";
+  } catch(e) {
+    show(false, "No se pudo enviar. Revise su conexión e intente de nuevo; sus respuestas siguen guardadas.");
+    b.disabled = false; b.textContent = "Enviar respuestas";
+  }
+}
+function sendWhatsApp(){ collect(); window.open(`https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(toText())}`, "_blank"); }
+function download(){
+  collect();
+  const blob = new Blob([toText()], {type:"text/plain;charset=utf-8"});
+  const a = Object.assign(document.createElement("a"), {href:URL.createObjectURL(blob), download:"cuestionario-el-samario.txt"});
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+render();
+</script>
+</body>
+</html>

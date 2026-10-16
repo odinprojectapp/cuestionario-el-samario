@@ -10,16 +10,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ===== CONFIGURACIÓN DE MARCA =====
-   Soluciones Digitales: azul #0F9ED5 → morado #A855F7 (tomado de propuesta.html)
-   Domicilios El Samario: cambia --samario si su logo usa otro color */
+   Domicilios El Samario: rojo #CD0208, negro y blanco (tomado de su volante de Instagram)
+   David Monsalve Guzmán: naranja #F77925 sobre negro (logo del repo portafolio) */
 :root{
-  --sd-blue:#0F9ED5; --sd-purple:#A855F7; --samario:#F2B705;
-  --bg:#F4F7FB; --surface:#FFFFFF; --text:#0B1626; --muted:#5B6B80; --line:#DCE4EE;
-  --focus:#0F9ED5; --ok:#16A34A; --err:#DC2626;
+  --rojo:#CD0208; --rojo-osc:#7A0105; --dm:#F77925; --samario:#CD0208;
+  --bg:#F6F4F3; --surface:#FFFFFF; --text:#141010; --muted:#6B5F5E; --line:#E6DEDC;
+  --focus:#CD0208; --ok:#16A34A; --err:#DC2626;
   --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#050C18; --surface:#0B1628; --text:#F1F5F9; --muted:#94A3B8; --line:#1E2D45; color-scheme:dark}}
+  --rojo:#F0353B; --bg:#0F0B0B; --surface:#1B1414; --text:#F5EFEE; --muted:#A99C9A; --line:#332726; color-scheme:dark}}
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0}
 body{font:16px/1.55 var(--font);background:var(--bg);color:var(--text);
@@ -28,13 +28,17 @@ body{font:16px/1.55 var(--font);background:var(--bg);color:var(--text);
 /* encabezado */
 .brandbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0 14px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
-.brand img{height:40px;width:auto;max-width:160px;object-fit:contain}
-.sd-word{font-weight:900;font-size:18px;letter-spacing:-.5px;background:linear-gradient(120deg,var(--sd-blue),var(--sd-purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand img{height:52px;width:auto;max-width:180px;object-fit:contain}
+.brand img.dm{border-radius:50%}
+.brand img.sam{border-radius:8px;border:1px solid var(--line)}
+.dm-name{font-weight:700;font-size:13px;line-height:1.2;color:var(--muted)}
+.dm-name b{display:block;color:var(--text);font-size:14px}
+.sd-word{font-weight:900;font-size:16px;color:var(--dm)}
 .sam-word{font-weight:800;font-size:17px;line-height:1.1}
 .sam-word small{display:block;font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .sam-word b{box-shadow:inset 0 -.38em 0 color-mix(in srgb,var(--samario) 70%,transparent)}
 .x{color:var(--muted);font-size:14px}
-.hero{background:linear-gradient(135deg,var(--sd-blue),var(--sd-purple));color:#fff;border-radius:16px;padding:24px 22px;margin-bottom:18px}
+.hero{background:linear-gradient(135deg,#CD0208 0%,#7A0105 70%,#141010 100%);color:#fff;border-radius:16px;padding:24px 22px;margin-bottom:18px}
 .hero h1{margin:0 0 8px;font-size:clamp(24px,6vw,32px);line-height:1.1;letter-spacing:-.5px;text-wrap:balance}
 .hero p{margin:0;opacity:.92;max-width:58ch}
 .hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
@@ -47,14 +51,14 @@ body{font:16px/1.55 var(--font);background:var(--bg);color:var(--text);
 .steps button[aria-current="step"]{background:var(--text);color:var(--bg);border-color:var(--text)}
 .steps button.done{border-color:var(--ok);color:var(--ok)}
 .bar{height:6px;background:var(--line);border-radius:3px;margin-top:10px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sd-blue),var(--sd-purple));transition:width .3s}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rojo),var(--rojo-osc));transition:width .3s}
 .pct{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between}
 /* preguntas */
 .section h2{font-size:22px;margin:8px 0 4px;letter-spacing:-.3px}
 .section .lead{color:var(--muted);margin:0 0 14px;font-size:15px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
-.card .qn{font-size:12px;font-weight:700;color:var(--sd-blue);letter-spacing:.06em}
-.card .key{font-size:11px;font-weight:700;color:var(--sd-purple);border:1px solid currentColor;border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.card .qn{font-size:12px;font-weight:700;color:var(--rojo);letter-spacing:.06em}
+.card .key{font-size:11px;font-weight:700;color:var(--rojo-osc);border:1px solid currentColor;border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
 .card label.q,.card legend.q{display:block;font-weight:700;font-size:16.5px;margin:0 0 10px;line-height:1.35;padding:0}
 .card legend.q{float:left;width:100%}
 fieldset.card>:not(legend){clear:both}
@@ -63,8 +67,8 @@ fieldset.card>:not(legend){clear:both}
 fieldset{border:0;margin:0;padding:0;min-width:0}
 .opts{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr))}
 .opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;min-height:46px}
-.opt input{width:18px;height:18px;accent-color:var(--sd-blue);flex:none;margin:0}
-.opt:has(input:checked){border-color:var(--sd-blue);background:color-mix(in srgb,var(--sd-blue) 9%,transparent)}
+.opt input{width:18px;height:18px;accent-color:var(--rojo);flex:none;margin:0}
+.opt:has(input:checked){border-color:var(--rojo);background:color-mix(in srgb,var(--rojo) 9%,transparent)}
 .sub{font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--text)}
 input[type=text],input[type=number],input[type=date],input[type=tel],textarea,select{width:100%;font:16px var(--font);color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
 textarea{min-height:96px;resize:vertical}
@@ -77,7 +81,7 @@ textarea{min-height:96px;resize:vertical}
 .nav .in{max-width:720px;margin:0 auto;display:flex;gap:10px;align-items:center}
 .nav .saved{font-size:12px;color:var(--muted);flex:1;min-width:0}
 .btn{font:700 15px var(--font);border-radius:10px;padding:12px 18px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}
-.btn.primary{background:linear-gradient(120deg,var(--sd-blue),var(--sd-purple));color:#fff;border:0}
+.btn.primary{background:linear-gradient(120deg,var(--rojo),var(--rojo-osc));color:#fff;border:0}
 .btn:disabled{opacity:.5;cursor:default}
 /* final */
 .final .card p{margin:0 0 10px}
@@ -94,11 +98,12 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 0}
 <div class="wrap">
   <div class="brandbar">
     <div class="brand">
-      <img src="logo-soluciones-digitales.png" alt="Soluciones Digitales" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sd-word',textContent:'Soluciones Digitales'}))">
+      <img class="dm" src="logo-david-monsalve.png" alt="David Monsalve Guzmán" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sd-word',textContent:'David Monsalve Guzmán'}))">
+      <span class="dm-name">Preparado por<b>David Monsalve</b></span>
     </div>
     <span class="x">para</span>
     <div class="brand">
-      <img src="logo-el-samario.png" alt="Domicilios El Samario" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sam-word',innerHTML:'<small>Domicilios</small><b>El Samario</b>'}))">
+      <img class="sam" src="logo-el-samario.png" alt="Domicilios El Samario" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sam-word',innerHTML:'<small>Domicilios</small><b>El Samario</b>'}))">
     </div>
   </div>
 
@@ -116,7 +121,7 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 0}
 
   <form id="form" novalidate></form>
 
-  <footer>Preparado por Soluciones Digitales · Sus respuestas son confidenciales y solo se usan para este proyecto.</footer>
+  <footer>Preparado por David Monsalve Guzmán ·Sus respuestas son confidenciales y solo se usan para este proyecto.</footer>
 </div>
 
 <div class="nav"><div class="in">
@@ -139,7 +144,7 @@ const SECTIONS = [
   {id:"q2",t:"¿Cuál es su horario de atención?",type:"text",ph:"Ej: lunes a sábado 7 am a 10 pm",extra:{type:"multi",label:"También atiende:",opts:["Domingos","Festivos","Horario nocturno"]}},
   {id:"q3",t:"¿Qué servicios le piden más?",hint:"Marque todos los que apliquen.",type:"multi",opts:["Domicilios de comida","Mensajería / documentos","Compras y mandados","Paquetería","Regalos en fechas especiales","Pagos y trámites"],other:1,extra:{type:"text",label:"¿Cuál le deja mejor ganancia?"}},
   {id:"q4",t:"Cuénteme un pedido paso a paso, desde el primer mensaje hasta que se cobra.",type:"area",ph:"Ej: el cliente me escribe al WhatsApp, le cotizo, le escribo al domiciliario por el grupo..."},
-  {id:"q5",t:"¿Qué zonas cubre?",type:"multi",opts:["Centro / Bahía","El Rodadero / Gaira","Taganga","Mamatoco","Bastidas","Bello Horizonte / Pozos Colorados","El Prado","Norte / Troncal","Minca","Fuera de la ciudad (Ciénaga, etc.)"],other:1,extra:{type:"area",label:"¿Cuáles rechaza o cobra distinto, y por qué?"}},
+  {id:"q5",t:"¿Qué zonas cubre?",type:"multi",opts:["Guamal (casco urbano)","Veredas y corregimientos de Guamal","Municipios vecinos","Santa Marta"],other:1,extra:{type:"area",label:"¿Qué barrios, veredas o municipios atiende? ¿Cuáles rechaza o cobra distinto, y por qué?"}},
   {id:"q6",t:"¿Qué hace cuando hay más pedidos que domiciliarios? ¿Y cuando llueve?",type:"area"},
   {id:"q7",t:"¿Qué problemas se repiten?",type:"multi",opts:["Pedidos olvidados","Direcciones mal dadas","Demoras","Pérdidas o daños","Clientes que no pagan","No hay domiciliario disponible","Quejas por el precio"],other:1}
  ]},
